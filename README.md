@@ -38,7 +38,7 @@ OK, I lied. This one is not free. But since you are the paying God, you can pret
 ## Monitoring TPU usage
 
 ### Cloud TPU
-W&B has integration with Cloud TPU and will the TPU usage metrics in the systems panel (2nd page) automatically. 
+W&B has integration with Cloud TPU and reports [TPU metrics](https://docs.wandb.ai/guides/models/app/settings-page/system-metrics/#google-cloud-tpu) in the systems panel (2nd page) automatically. 
 
 ![Screenshot 2025-02-24 at 16 35 04](https://github.com/user-attachments/assets/25abeacc-cea1-418d-b55c-039ca2eb7851)
 
