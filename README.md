@@ -1,6 +1,6 @@
 # Train a GPT2 model _for free_ on Google TPUs using JAX
 
-This repository contains code for pretraining a GPT2 model on Google TPUs using JAX. The notebook is adapted from the offical [miniGPT tutorial](https://docs.jaxstack.ai/en/latest/JAX_for_LLM_pretraining.html) and works on free-tier Colab, Kaggle and Cloud TPU. Since I'm not rich in TPU resources, only TPU v2 and v3 have been tested. Newer TPUs should also work though.
+This repository contains JAX code for pretraining a GPT2 model on Google TPUs. The notebook is adapted from the offical [miniGPT tutorial](https://docs.jaxstack.ai/en/latest/JAX_for_LLM_pretraining.html) and works on free-tier Colab, Kaggle and Cloud TPU. Since I'm not rich in TPU resources, only TPU v2 and v3 have been tested. Newer TPUs should also work though.
 
 Only GPT2 and GPT2 medium have been tested. Bigger variants will OOM on TPU v3. Dataset used is [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2), same as Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT/) because I wanted to compare the final losses.
 
