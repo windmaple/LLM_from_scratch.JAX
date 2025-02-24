@@ -55,7 +55,7 @@ Neither is integrated with W&B unfortunately. But you can still `pip install tpu
 
 
 ## Final result
-If stars are aligned, you can see the final losses:
+If stars are aligned, you can get the final losses like below:
 
 <img width="359" alt="Screenshot 2025-02-24 at 16 37 28" src="https://github.com/user-attachments/assets/fb08ecd2-cfb5-42a4-bf62-187bf0cec764" />
 
