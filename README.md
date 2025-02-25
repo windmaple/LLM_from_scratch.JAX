@@ -4,6 +4,9 @@ This repository contains JAX code for pretraining a GPT2 model on Google TPUs. T
 
 Only GPT2 and GPT2 medium have been tested. Bigger variants will OOM on TPU v3. Dataset used is [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2), same as Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT/) because I wanted to compare the final losses.
 
+<img width="369" alt="Screenshot 2025-02-25 at 09 59 00" src="https://github.com/user-attachments/assets/8315de4f-620e-41a7-86a9-5b8c2a71a36e" />
+
+
 ## How to run
 First, get your Kaggle credential and Weights and Biases API key ready. Add to your secrets if you are using Colab and Kaggle.
 
@@ -25,6 +28,8 @@ Kaggle is more generous, offers 9 hours of non-interrupted TPU v3 per session, w
 6. You can also try GPT2 medium if you change the `GPT2_variant` variable. Kaggle will stop the run before it finishes though
 
 An alternative way to run is to `Save version` -> `Save & Run ALL`, which just run the notebook in the background.
+
+Technically you can also train a GPT2 medium model on Kaggle; although Kaggle disconnects you after 9 full hours it can save checkpoint files for you, so that you can resume training. But I haven't tried this because it's a bit of a pain.
 
 ### Cloud TPU
 OK, I lied. This one is not free. But since you are the paying God, you can pretty much do whatever you want, like train GPT2 medium to completion. 
