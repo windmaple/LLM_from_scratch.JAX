@@ -4,7 +4,7 @@ This repository contains JAX code for pretraining a GPT2 model on Google TPUs. T
 
 Only GPT2 and GPT2 medium have been tested. Bigger variants will OOM on TPU v3. Dataset used is [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2), same as Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT/) because I wanted to compare the final losses.
 
-<img width="369" alt="Screenshot 2025-02-25 at 09 59 00" src="https://github.com/user-attachments/assets/8315de4f-620e-41a7-86a9-5b8c2a71a36e" />
+<img width="369" alt="Screenshot 2025-02-25 at 09 59 00" src="GPT2.png" />
 
 
 ## How to run
