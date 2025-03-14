@@ -19,7 +19,7 @@ First, get your Kaggle credential and Weights and Biases API key ready. Add to y
 5. A paid account, you may be able to see it through, although I haven't tried it myself (TPU v2 is just too slow). Colab now offers TPU v5e as well, but it's only one chip (unlike v2's 4 chip) and you need to change the mesh to run on it
 
 ### Kaggle
-Kaggle is more generous, offers 9 hours of non-interrupted TPU v3 per session, which is sufficient to train the smallest GPT2 variant.
+Kaggle is more generous, offering 9 hours of non-interrupted TPU v3 per session, which is sufficient to train the smallest GPT2 variant.
 1. Import the notebook on Kaggle
 2. Add the [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2) dataset as input in the top right corner of the side panel on the right.
 3. Make sure W&B API key is accessible to your notebook
@@ -32,7 +32,7 @@ An alternative way to run is to `Save version` -> `Save & Run ALL`, which just r
 Technically you can also train a GPT2 medium model on Kaggle; although Kaggle disconnects you after 9 full hours it can save checkpoint files for you, so that you can resume training. But I haven't tried this because it's a bit of a pain.
 
 ### Cloud TPU
-OK, I lied. This one is not free. But since you are the paying God, you can pretty much do whatever you want, like train GPT2 medium to completion. 
+OK, I lied. This one is not free. But since you are the paying God, you can pretty much do whatever you want, like training GPT2 medium to completion. 
 1. Spin up your TPU VM and ssh into it
 2. Download the notebook
 3. Pip install kaggle and get your [kaggle.json](https://www.kaggle.com/docs/api)
