@@ -36,9 +36,10 @@ OK, I lied. This one is not free. But since you are the paying God, you can pret
 1. Spin up your TPU VM and ssh into it
 2. Download the notebook
 3. Pip install kaggle and get your [kaggle.json](https://www.kaggle.com/docs/api)
-4. Start a tmux or screen session and then run the notebook like this (an alternative is to convert it to a `.py` file):
+4. Pip install jupyter
+5. Start a tmux or screen session and then run the notebook like this (an alternative is to convert it to a `.py` file):
    `export WANDB_API_KEY=$your_key; time jupyter execute GPT2_pretrain.ipynb`
-5. There won't be much logging shown in the console, but don't worry, everything is directed to your W&B so you can see the output there
+6. There won't be much logging shown in the console, but don't worry, everything is directed to your W&B so you can see the output there
 
 ## Monitoring TPU usage
 
