@@ -66,3 +66,6 @@ If stars are aligned, you can get the final losses like below:
 <img width="359" alt="Screenshot 2025-02-24 at 16 37 28" src="https://github.com/user-attachments/assets/fb08ecd2-cfb5-42a4-bf62-187bf0cec764" />
 
 which are very much in line with [nanoGPT's](https://github.com/karpathy/nanoGPT/).
+
+## Faster speed on Trillium
+Trillium chips, which have 32G HBM and accommodate 2X batch size, can finish training in 82 minutes. 
