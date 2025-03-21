@@ -68,4 +68,4 @@ If stars are aligned, you can get the final losses like below:
 which are very much in line with [nanoGPT's](https://github.com/karpathy/nanoGPT/).
 
 ## Faster speed on Trillium
-Trillium chips, which have 32G HBM and accommodate 2X batch size, can finish training in 82 minutes. 
+Trillium chips, which have 32G HBM per chip and can accommodate 2X batch size, can finish training in just 82 minutes. 
