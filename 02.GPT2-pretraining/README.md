@@ -32,7 +32,7 @@ An alternative way to run is to `Save version` -> `Save & Run ALL`, which just r
 Technically you can also train a GPT2 medium model on Kaggle; although Kaggle disconnects you after 9 full hours it can save checkpoint files for you, so that you can resume training. But I haven't tried this because it's a bit of a pain.
 
 ### Cloud TPU
-OK, I lied. This one is not free. But since you are the paying God, you can pretty much do whatever you want, like training GPT2 medium to completion. 
+This one is not free. But since you are paying, you can pretty much do whatever you want, like training GPT2 medium to completion. 
 1. Spin up your TPU VM and ssh into it
 2. Download the notebook
 3. Pip install kaggle and get your [kaggle.json](https://www.kaggle.com/docs/api)
