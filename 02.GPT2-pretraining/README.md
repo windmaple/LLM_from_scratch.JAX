@@ -62,8 +62,7 @@ Neither is integrated with W&B unfortunately. But you can still `pip install tpu
 
 ## Final result
 If stars are aligned, you can get the final losses like below:
-
-<img width="359" alt="Screenshot 2025-02-24 at 16 37 28" src="https://github.com/user-attachments/assets/fb08ecd2-cfb5-42a4-bf62-187bf0cec764" />
+<img width="710" height="211" alt="Screenshot 2025-07-18 at 10 35 27" src="https://github.com/user-attachments/assets/cc5ee350-e7b7-499e-8793-6f8175b21282" />
 
 which are very much in line with [nanoGPT's](https://github.com/karpathy/nanoGPT/).
 
