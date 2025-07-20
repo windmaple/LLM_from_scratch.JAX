@@ -56,9 +56,11 @@ You can also, in another console, `pip install tpu-info` and then `watch -n 1 tp
 
 Google Cloud console has additional monitoring tools if you use v4 or newer.
 
-### Colab and Kaggle
-Neither is integrated with W&B unfortunately. But you can still `pip install tpu-info` and then add `!tpu-info` in the middle of the training loop. Note that this might slow down training a bit.
+### Kaggle
+Kaggle TPUs are not integrated with W&B unfortunately. But you can still `pip install tpu-info` and then add `!tpu-info` in the middle of the training loop. Note that this might slow down training a bit.
 
+### Colab
+Colab now supports terminal, so you can use `watch -n 1 tpu-info`.
 
 ## Final result
 If stars are aligned, you can get the final losses like below:
