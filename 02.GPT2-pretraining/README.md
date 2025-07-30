@@ -2,7 +2,7 @@
 
 This repository contains JAX code for pretraining a GPT2 model on Google TPUs. The notebook is adapted from the offical [miniGPT tutorial](https://docs.jaxstack.ai/en/latest/JAX_for_LLM_pretraining.html) and works on free-tier Colab, Kaggle and Cloud TPU (single board TPU v2 - v6e all work).
 
-Only GPT2 and GPT2 medium have been tested. Bigger variants will OOM on TPU v3. Dataset used is [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2), same as [nanoGPT](https://github.com/karpathy/nanoGPT/) because I wanted to compare the final losses.
+Only GPT2 and GPT2 medium have been tested. Bigger variants will OOM on TPU v3.
 
 <img width="600" alt="Screenshot 2025-02-25 at 09 59 00" src="GPT2.png" />
 
@@ -62,7 +62,7 @@ Kaggle TPUs are not integrated with W&B unfortunately. But you can still `pip in
 ### Colab
 Colab now supports terminal, so you can use `watch -n 1 tpu-info`.
 
-## Final result
+## Final result ([OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2))
 If stars are aligned, you can get the final losses like below:
 
 | model | params | train loss | val loss | training time (TPU v3)
