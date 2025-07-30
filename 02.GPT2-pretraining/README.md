@@ -62,8 +62,8 @@ Kaggle TPUs are not integrated with W&B unfortunately. But you can still `pip in
 ### Colab
 Colab now supports terminal, so you can use `watch -n 1 tpu-info`.
 
-## Final result ([OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2))
-If stars are aligned, you can get the final losses like below:
+## Final result
+If stars are aligned, you can get the final losses like below for [OpenWebText](https://www.kaggle.com/datasets/windmaple/openwebtext-gpt2):
 
 | model | params | train loss | val loss | training time (TPU v3)
 | ------| ------ | ---------- | -------- | -----------------------
