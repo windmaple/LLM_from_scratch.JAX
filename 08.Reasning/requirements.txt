@@ -1,0 +1,9 @@
+jax
+flax
+optax
+orbax-checkpoint
+google-tunix==0.1.7
+kagglehub
+sentencepiece
+numpy
+matplotlib
