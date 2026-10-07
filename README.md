@@ -5,3 +5,4 @@ This repository host LLM tutorials based on JAX.
 * [04.GPT2_LoRA](./04.GPT2-LoRA): use LoRA to instruct tune the 124M pretrained GPT2
 * [05.GPT2 DPO](./05.GPT2-DPO/GPT2-DPO.ipynb): use [Direct Preference Optimization](https://arxiv.org/abs/2205.11916) to align the 124M pretrained GPT2
 * [06.Loading the Llama 3.2 1B model](./04.Loading-model-from-HF/): load an existing model from Hugging Face and run inference
+* [07.dLLM](./07.dLLM/): turn the miniGPT into a masked diffusion language model (MDLM / LLaDA) and train it on TinyStories

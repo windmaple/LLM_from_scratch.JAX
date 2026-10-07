@@ -1,60 +1,101 @@
-# micro-dllm (JAX / Flax NNX)
+# 07.dLLM: a tiny text-diffusion model (miniGPT in Flax NNX) trained on TinyStories
 
-This repo trains a text diffusion language model (micro-dLLM) based on [mercury's training and inference](https://arxiv.org/abs/2506.17298) approach using the **JAX / Flax NNX API**, the **MiniGPT** architecture from [Train a miniGPT language model with JAX](https://docs.jaxstack.ai/en/latest/JAX_for_LLM_pretraining.html), and the **GPT-2** tokenizer (`tiktoken`). This is adapted from [micro-dllm](https://github.com/SwekeR-463/micro-dllm).
+A JAX / [Flax NNX](https://flax.readthedocs.io) / [Optax](https://optax.readthedocs.io) implementation
+of a **masked discrete diffusion language model** (the MDLM / LLaDA recipe). The denoiser is the
+**miniGPT** built in [01.miniGPT](../01.miniGPT/); the only change is to remove the causal mask, so
+attention is bidirectional. The model is trained on
+[TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories).
 
-[![Diffusion Trace](./artifacts/media/diffusion_trace.gif)](./artifacts/media/diffusion_trace.mp4)
+![Denoising trajectories of the diffusion miniGPT under three sampling settings](assets/diffusion_stacked.gif)
 
-## What This Implements
+Generation starts from a fully masked 256-token canvas and ends with a finished story, revealing one token per step:
 
-- Forward corruption with `[MASK]` tokens over random timesteps `t in [1..T]`
-- Time-conditioned `MiniGPT` Transformer denoiser (`TokenAndPositionEmbedding` + `timestep_emb` + `TransformerBlock`s in `flax.nnx`)
-- Full-sequence denoising objective (predict clean `x0` from noisy `x_t` on masked positions using `optax.softmax_cross_entropy_with_integer_labels`)
-- Reverse denoising at inference (`t = T -> 1`, plus final `t=0` pass)
-- Confidence-based remasking for iterative refinement
-- GIF / MP4 trace output for denoising steps
+- **A**: prompted with "Once upon a time", random-order unmasking
+- **B**: unconditional (no prompt), random-order unmasking
+- **C**: prompted, confidence-based unmasking with semi-autoregressive blocks of 32 (LLaDA-style)
 
-## Architecture Details
+## How it works
 
-- Framework: JAX + Flax NNX (`flax.nnx`) + Optax (`optax`)
-- Parallelism: `jax.sharding.Mesh`, `NamedSharding`, `PartitionSpec`, and `nnx.with_partitioning`
-- Tokenization: GPT-2 BPE tokenizer (`tiktoken.get_encoding("gpt2")`) + `[MASK]` special token (`vocab_size = 50258`, `mask_token_id = 50257`)
-- Context length: `maxlen = block_size = 256` tokens
-- Diffusion steps: `T = 100`
-- Layers: `num_transformer_blocks = 4`
-- Attention heads: `num_heads = 8`
-- Embedding dimension: `embed_dim = 256`
-- Feed-forward dimension: `feed_forward_dim = 256`
-- Attention type: bidirectional (`mask=None`)
-- Positional scheme: learned positional embeddings (`TokenAndPositionEmbedding` with `nnx.Embed`)
-- Normalization: `nnx.LayerNorm`
-- Timestep conditioning: learned embedding `nnx.Embed(T + 1, embed_dim)`
+| | Autoregressive miniGPT (01) | This model (masked diffusion) |
+|---|---|---|
+| Attention | causal (`mask=causal_attention_mask(T)`) | **bidirectional** (`mask=None`) |
+| Corruption | none | each token → `<mask>` with prob. `t ~ U(0,1)` |
+| Training loss | next-token CE | `(1/t) · CE on masked tokens` (continuous-time ELBO) |
+| Generation | left → right, 1 token / step | start from all `<mask>`, reveal ~`L/steps` tokens per step, in any order |
 
-## Training
+**Sampling.** We start from a fully masked 256-token canvas. At each step the model predicts
+every masked position. We then commit either the most confident predictions (`--strategy confidence`,
+as in LLaDA) or a random subset (`--strategy random`, the vanilla MDLM sampler). Training stories are
+right-padded with `<eos>`, so the model also decides *where the story ends* (the small outlined boxes in
+the GIF).
+
+**miniGPT config** (the same model as 01.miniGPT): 4 transformer blocks, 8 heads, 256-d embeddings,
+256-d feed-forward, 256 context. It uses `TokenAndPositionEmbedding` (learned positions), **post**-LayerNorm
+blocks built on `nnx.MultiHeadAttention`, a ReLU MLP, and an untied `nnx.Linear` output layer, for
+~5.8M params in total.
+
+**Tokenizer.** We use GPT-2 BPE (via `tiktoken`), remapped to the 8,189 most frequent TinyStories
+tokens plus 3 special tokens (`<eos>`, `<mask>`, `<unk>`). This covers 99.8% of tokens and makes the
+softmax ~6× cheaper.
+
+## Files
+
+| File | Purpose |
+|---|---|
+| [`model.py`](model.py) | miniGPT (bidirectional) in Flax NNX |
+| [`diffusion.py`](diffusion.py) | forward masking process, ELBO loss, jitted iterative-unmasking sampler |
+| [`data.py`](data.py) | TinyStories download/tokenization, compact tokenizer |
+| [`train.py`](train.py) | Grain data pipeline, Optax AdamW + warmup/cosine schedule, training loop, eval |
+| [`checkpoint.py`](checkpoint.py) | Orbax save / restore of params and optimizer state |
+| [`visualize.py`](visualize.py) | sample, then render the denoising trajectory as a GIF |
+| [`plot_loss.py`](plot_loss.py) | training / validation curves |
+| [`stack_gifs.py`](stack_gifs.py) | stack the three GIFs into one labelled comparison GIF |
+
+## Usage
 
 ```bash
-python3 train.py
+pip install jax flax optax grain orbax-checkpoint tiktoken pyarrow numpy pillow matplotlib huggingface_hub
+
+python data.py                       # -> data/{train,val}.bin, data/vocab.json
+python train.py                      # -> out/ckpt/, out/ckpt.json, out/log.jsonl
+python plot_loss.py                  # -> assets/loss.png
+
+# GIFs (default: random-order unmasking, 256 steps = 1 token / step)
+python visualize.py --prompt "Once upon a time" --seed 3 --out assets/diffusion_prompt.gif
+python visualize.py --seed 2 --out assets/diffusion_uncond.gif
+python visualize.py --prompt "Once upon a time" --strategy confidence --block_len 32 --seed 1 \
+    --out assets/diffusion_block_confidence.gif
+python stack_gifs.py                 # -> assets/diffusion_stacked.gif (A/B/C comparison)
 ```
 
-Checkpoints are saved to `artifacts/models/` during training and at the end.
+GIF legend: grey box = `<mask>`, yellow = tokens revealed at this step, blue = prompt,
+outlined box = `<eos>` padding.
 
-At the end of training, `train.py` prints a final validation metrics block with:
+## Results
 
-- `Perplexity` (derived from masked validation cross-entropy)
-- `Masked reconstruction accuracy` (accuracy on corrupted positions only)
-- `Entropy per timestep` (masked-token predictive entropy across diffusion timesteps)
-- `Reverse-step token change rate` (fraction of generated tokens that change between reverse steps)
-- `Distinct-2 diversity` (unique generated bigrams / total generated bigrams, prompt excluded)
+Trained on CPU (JAX/XLA, 48 cores, fp32) for 8,000 iterations × 64 stories × 256 tokens (~131M
+tokens). That took ~1h43m at ~0.77 s/iter, using the first of the 4 train shards (≈ 530k stories).
+Optimizer: AdamW (β = 0.9, 0.95; weight decay 0.1 on matrices / embeddings), gradient clipping at 1.0,
+LR warmup to 1e-3 over 200 iterations followed by cosine decay to 1e-4.
 
-## Inference + Visualizer
+| | value |
+|---|---|
+| params | **5.8M** |
+| final val ELBO | **2.14 nats/token** (perplexity upper bound ≤ 8.5) |
+| final val masked-token CE | **2.65** |
 
-```bash
-python3 inference.py \
-  --checkpoint artifacts/models/minigpt_tinystories_ckpt \
-  --prompt "Once upon a time" \
-  --gen-len 64 \
-  --temperature 0.0 \
-  --viz-gif artifacts/media/diffusion_trace.gif \
-  --viz-video artifacts/media/diffusion_trace.mp4 \
-  --trace-every 5 \
-  --gif-frame-ms 180
-```
+![loss](assets/loss.png)
+
+### Sampler matters
+
+| sampler | behaviour |
+|---|---|
+| `random` (MDLM ancestral, default) | diverse, full-length stories; occasional local incoherence |
+| `confidence`, whole sequence | **collapses to ~55–65-token stories**: trailing `<eos>` padding is the most confident prediction, so it is committed first and squeezes the story |
+| `confidence` + `--block_len 32` (LLaDA semi-AR) | fluent and long, but repetitive / low diversity ("Lily … her toy car") |
+
+Sample (random unmasking, prompt "Once upon a time"):
+
+> Once upon a time, there was a little girl named Lily. She loved to play on her shelf, put it on her
+> table and her write and draw around them. … Lily was so happy and her mom found her toys and play
+> together. … The girl was very happy and hugged her because it was warm. …

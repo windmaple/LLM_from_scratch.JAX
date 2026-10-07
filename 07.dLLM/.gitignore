@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+data/*.bin
+data/*.npy
+out/ckpt/
+out/train.log

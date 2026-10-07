@@ -1,0 +1,36 @@
+{
+ "config": {
+  "vocab_size": 8192,
+  "maxlen": 256,
+  "embed_dim": 256,
+  "num_heads": 8,
+  "feed_forward_dim": 256,
+  "num_transformer_blocks": 4,
+  "dropout_rate": 0.0
+ },
+ "iter": 7999,
+ "args": {
+  "data_dir": "data",
+  "out_dir": "out",
+  "num_transformer_blocks": 4,
+  "num_heads": 8,
+  "embed_dim": 256,
+  "feed_forward_dim": 256,
+  "maxlen": 256,
+  "dropout": 0.0,
+  "batch_size": 64,
+  "max_iters": 8000,
+  "lr": 0.001,
+  "min_lr": 0.0001,
+  "warmup_iters": 200,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "num_workers": 2,
+  "log_interval": 20,
+  "eval_interval": 500,
+  "eval_batches": 10,
+  "resume": false,
+  "seed": 0
+ },
+ "data_state": "{\n    \"version\": 2,\n    \"last_seen_indices\": {\n        \"0\": 511998,\n        \"1\": 511999\n    },\n    \"last_worker_index\": -1,\n    \"worker_count\": 2,\n    \"sampler\": \"IndexSampler(num_records=529875, shard_options=NoSharding(shard_index=0, shard_count=1, drop_remainder=False), shuffle=True, num_epochs=None, seed=0)\",\n    \"data_source\": \"StorySource('data/train.bin', n_stories=529875)\"\n}"
+}

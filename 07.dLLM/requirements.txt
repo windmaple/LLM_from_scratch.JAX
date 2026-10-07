@@ -1,8 +1,0 @@
-jax
-flax
-optax
-tiktoken
-numpy
-pillow
-datasets
-matplotlib
